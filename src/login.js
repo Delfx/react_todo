@@ -1,17 +1,57 @@
 import React from 'react';
+import {ServerUrl} from "./config";
 
 class Login extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            username: '',
+            password: ''
+        };
+    }
+
+
+
+     fetchLogin = async (event)  =>  {
+        event.preventDefault();
+        const formData = new URLSearchParams();
+
+        formData.append('username', this.state.username);
+        formData.append('password', this.state.password);
+
+        try {
+            const response = await fetch(ServerUrl + 'login', {
+                credentials: 'include',
+                method: 'POST',
+                body: formData
+            });
+
+            const myJson = await response.json();
+            console.log(myJson);
+            this.props.LoggedState(myJson);
+
+        } catch (e) {
+            console.log(e);
+        }
+
+    };
+
+    formHandler = (event) => {
+        this.setState({[event.target.name]: event.target.value})
+    };
+
     render() {
         return (
             <form onSubmit={this.fetchLogin}>
                 <div className="form-group">
                     <label htmlFor="userName">Name</label>
-                    <input type="text" name="username" className="form-control" id="userName" placeholder="Enter name"
+                    <input type="text" name="username" onChange={this.formHandler} className="form-control" id="userName" placeholder="Enter name"
                            required/>
                 </div>
                 <div className="form-group">
                     <label htmlFor="inputPassword">Password</label>
-                    <input type="password" name="password" className="form-control" id="inputPassword"
+                    <input type="password" name="password" onChange={this.formHandler} className="form-control" id="inputPassword"
                            placeholder="Password" required/>
                 </div>
                 <input type="submit" value="Submit" className="btn btn-primary"/>
@@ -20,29 +60,7 @@ class Login extends React.Component {
         );
     }
 
-    async fetchLogin(event) {
-        event.preventDefault();
-        console.log(event.target.value());
-        const formData = new URLSearchParams();
 
-
-        formData.append('username', 'lukas');
-        formData.append('password', 'lukas');
-
-        try {
-            const response = await fetch('http://localhost:3001/login', {
-                method: 'POST',
-                body: formData
-            });
-
-
-            const myJson = await response.text();
-            console.log(myJson);
-        } catch (e) {
-            console.log(e);
-        }
-
-    }
 }
 
 
