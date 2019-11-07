@@ -1,5 +1,6 @@
 import React from 'react';
-import {forEach} from "react-bootstrap/es/utils/ElementChildren";
+import divWithClassName from "react-bootstrap/es/utils/divWithClassName";
+
 
 class ListOne extends React.Component {
 
@@ -29,12 +30,12 @@ class ListOne extends React.Component {
                 error
             });
         }
-        // Note: it's important to handle errors here
-        // instead of a catch() block so that we don't swallow
-        // exceptions from actual bugs in components.
+    }
 
+    updateThing() {
 
     }
+
 
     render() {
         const {error, isLoaded, things} = this.state;
@@ -42,20 +43,21 @@ class ListOne extends React.Component {
             return <div>Error: {error.message}</div>;
         } else if (!isLoaded) {
             return <div>Loading...</div>;
+        } else if (things.length === 0) {
+            return <div className="alert alert-primary" role="alert">No Items</div>
         } else {
             return (
                 <ul id="allthings" className="list-group mt-3">
                     {things.map(thing => (
                         <li key={thing.id} className="list-group-item">
                             <div className="groupForm">
-                                <form className="d-inline">
+                                <div className="d-inline">
                                     <span> {thing.thing} </span>
-                                </form>
+                                </div>
 
-                                <form action="/thing/update" method="post" className="changeForm d-inline">
+                                <form onSubmit={this.updateThing.bind(this, thing.id)} className="changeForm d-inline">
                                     <input type="submit" value="Change" name="change"
                                            className="btn btn-warning btn-sm ml-2"/>
-                                    <input type="hidden" value="<%= thing.id %>" name="id" className="id"/>
                                 </form>
 
                                 <div className="container d-inline p-0">
