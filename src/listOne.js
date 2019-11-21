@@ -1,5 +1,5 @@
 import React from 'react';
-import Thing from 'Thing.js';
+import Thing from './Thing';
 import divWithClassName from "react-bootstrap/es/utils/divWithClassName";
 
 
@@ -33,10 +33,6 @@ class ListOne extends React.Component {
         }
     }
 
-    updateThing() {
-
-
-    }
 
     render() {
         const {error, isLoaded, things} = this.state;
