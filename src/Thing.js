@@ -75,7 +75,7 @@ class Thing extends React.Component {
                     <button className="ml-1" type="submit">OK</button>
                 </form>;
         }
-
+//need fix//
         return (
             <li key={thing.id} className="list-group-item">
                 <div className="groupForm">
