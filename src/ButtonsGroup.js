@@ -13,23 +13,26 @@ class ButtonsGroup extends React.Component {
 
     hideOnClick() {
         this.setState({hide: true});
-        this.props.makeEditable();
+        this.props.makeEditable(this.showButton.bind(this));
     }
 
+    showButton() {
+        this.setState({hide: false});
+    }
 
     render() {
-        if (this.state.hide){
+        if (this.state.hide) {
             return (
                 <div className="d-none">
-                    <Update />
-                    <Delete />
+                    <Update/>
+                    <Delete/>
                 </div>
             )
         } else {
             return (
                 <div className="d-inline">
                     <Update onClickProperty={this.hideOnClick.bind(this)}/>
-                    <Delete />
+                    <Delete/>
                 </div>
             )
 
