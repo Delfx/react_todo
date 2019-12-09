@@ -33,7 +33,6 @@ class App extends React.Component {
             });
             const user = await response.json();
             this.setUser(user);
-            console.log(user);
         } catch (e) {
             console.log(e);
         }
@@ -67,7 +66,6 @@ class App extends React.Component {
     };
 
     render() {
-        console.log(this.state);
         const isLogged = this.state.user.isLogged;
         let link;
 
@@ -81,9 +79,8 @@ class App extends React.Component {
             <Router>
                 <div>
                     <nav className="navbar navbar-expand-sm navbar-light bg-light mb-4">
-                        <Link to="/"><a className="navbar-brand" href="/">Things app</a></Link>
-                        <Link to={"allthings"} className="container p-0">
-                            <a className="navbar-brand" href="/">All Things</a>
+                        <Link to="/" className="navbar-brand" >Things app</Link>
+                        <Link to={"allthings"} className="container p-0 navbar-brand">All Things
                         </Link>
                         {link}
                     </nav>

@@ -22,6 +22,9 @@ class Thing extends React.Component {
         this.setState({isEditable: true});
     }
 
+    cancelEditable(){
+        this.setState({isEditable: false})
+    }
 
     async submitChange(event) {
         event.preventDefault();
@@ -64,7 +67,6 @@ class Thing extends React.Component {
 
     render() {
         const thing = this.state.thing;
-
         let thingName = <span> {thing.thing} </span>;
 
         if (this.state.isEditable) {
@@ -73,16 +75,17 @@ class Thing extends React.Component {
                     <input type="text" name="FirstName" value={this.state.thingNameUpdate}
                            onChange={this.handleChange.bind(this)}/>
                     <button className="ml-1" type="submit">OK</button>
+                    <button onClick={this.cancelEditable.bind(this)} className="ml-1" type="reset">Cancel</button>
                 </form>;
         }
-//need fix//
+
         return (
-            <li key={thing.id} className="list-group-item">
+            <li className="list-group-item">
                 <div className="groupForm">
                     <div className="d-inline">
                         {thingName}
                     </div>
-                    <ButtonsGroup makeEditable={this.makeEditable.bind(this)}/>
+                    <ButtonsGroup deleteThing={this.props.deleteThing} userId={thing.userid} isEditable={this.state.isEditable} makeEditable={this.makeEditable.bind(this)}/>
                 </div>
             </li>
         );

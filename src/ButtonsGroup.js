@@ -2,6 +2,7 @@ import React from 'react';
 import Update from './Update'
 import Delete from './Delete'
 
+
 class ButtonsGroup extends React.Component {
 
     constructor(props) {
@@ -16,11 +17,26 @@ class ButtonsGroup extends React.Component {
         this.props.makeEditable(this.showButton.bind(this));
     }
 
+    componentDidUpdate(prevProps) {
+        if (this.props.isEditable !== prevProps.isEditable && !this.props.isEditable) {
+            this.showButton();
+        }
+    }
+
     showButton() {
         this.setState({hide: false});
     }
 
     render() {
+        const user = sessionStorage.getItem('userId');
+        const userId = Number.parseInt(user, 10);
+
+
+
+        if (!user || (user && this.props.userId !== userId)) {
+            return null;
+        }
+
         if (this.state.hide) {
             return (
                 <div className="d-none">
@@ -32,7 +48,7 @@ class ButtonsGroup extends React.Component {
             return (
                 <div className="d-inline">
                     <Update onClickProperty={this.hideOnClick.bind(this)}/>
-                    <Delete/>
+                    <Delete onClick={this.props.deleteThing}/>
                 </div>
             )
 
