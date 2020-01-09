@@ -68,32 +68,37 @@ class App extends React.Component {
     render() {
         const isLogged = this.state.user.isLogged;
         let link;
+        let userThing;
 
 
         if (isLogged) {
-            link = <Link to="/" onClick={this.logoutPost} className="navbar-brand">Logout</Link>
+            link = <Link to="/" onClick={this.logoutPost} className="navbar-brand">Logout</Link>;
+            userThing = <Link to="/userThings" className="navbar-brand">User Things</Link>
         } else {
-            link = <Link to="/login" className="navbar-brand">Login</Link>
+            link = <Link to="/login" className="navbar-brand">Login</Link>;
         }
         return (
             <Router>
                 <div>
                     <nav className="navbar navbar-expand-sm navbar-light bg-light mb-4">
-                        <Link to="/" className="navbar-brand" >Things app</Link>
-                        <Link to={"allthings"} className="container p-0 navbar-brand">All Things
-                        </Link>
-                        {link}
+                        <ul className="navbar-nav mr-auto">
+                            <Link to="/" className="navbar-brand" >Things app</Link>
+                            {userThing}
+                        </ul>
+                        <ul className="navbar-nav">
+                            {link}
+                        </ul>
                     </nav>
                     <div className="container">
                         <Switch>
                             <Route path="/login">
                                 <Login LoggedState={this.setUser.bind(this)}/>
                             </Route>
-                            <Route path="/allthings">
-                                <AllThings/>
+                            <Route path="/userThings">
+                               <ListOne hasUserThings={true}/>
                             </Route>
                             <Route path="/">
-                                <ListOne/>
+                                <ListOne />
                             </Route>
                         </Switch>
                     </div>
@@ -104,9 +109,5 @@ class App extends React.Component {
     }
 }
 
-
-function AllThings() {
-    return <h2>All Things</h2>
-}
 
 export default App;

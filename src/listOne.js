@@ -1,7 +1,7 @@
 import React from 'react';
 import Thing from './Thing';
 import {ServerUrl} from './config';
-import {forEach} from "react-bootstrap/es/utils/ElementChildren";
+import AddThing from './AddThing';
 
 class ListOne extends React.Component {
 
@@ -12,12 +12,28 @@ class ListOne extends React.Component {
             isLoaded: false,
             things: []
         };
+
+        this.addThing = this.addThing.bind(this);
     }
 
+    addThing(thing) {
+        const thingsCopy = this.state.things.slice();
+        const user = sessionStorage.getItem('userId');
+        const userId = Number.parseInt(user, 10);
 
-    async componentDidMount() {
+        thingsCopy.push({thing: thing, userid: userId});
+        this.setState({things: thingsCopy});
+        console.log(this.state.things)
+    }
+
+    async fetchData() {
+        let reqURL = ServerUrl;
         try {
-            const response = await fetch("http://localhost:3001/");
+            if ('hasUserThings' in this.props && this.props.hasUserThings) {
+                reqURL = ServerUrl + 'user/things';
+            }
+
+            const response = await fetch(reqURL, {credentials: 'include'});
             const things = await response.json();
 
             this.setState({
@@ -31,6 +47,18 @@ class ListOne extends React.Component {
                 error
             });
         }
+    }
+
+    async componentDidUpdate(prevProps, prevState, snapshot) {
+        console.log(prevProps.hasUserThings, prevState);
+
+        if (prevProps.hasUserThings !== this.props.hasUserThings) {
+            this.fetchData();
+        }
+    }
+
+    async componentDidMount() {
+        this.fetchData();
     }
 
 
@@ -68,14 +96,25 @@ class ListOne extends React.Component {
         } else if (!isLoaded) {
             return <div>Loading...</div>;
         } else if (things.length === 0) {
-            return <div className="alert alert-primary" role="alert">No Items</div>
+            return (
+                <div>
+                    <div className="alert alert-primary" role="alert">No Items</div>
+                    <AddThing/>
+                </div>
+            );
         } else {
             return (
-                <ul id="allthings" className="list-group mt-3">
-                    {things.map(thing => (
-                        <Thing deleteThing={this.deleteThing.bind(this, thing.id)} key={thing.id} thing={thing}/>
-                    ))}
-                </ul>
+                <div>
+                    <ul id="allthings" className="list-group mt-3">
+                        {things.map(thing => (
+                            <Thing deleteThing={this.deleteThing.bind(this, thing.id)} key={thing.id} thing={thing}/>
+                        ))}
+                    </ul>
+
+                    <AddThing addThing={this.addThing}/>
+                </div>
+
+
             );
         }
     }
