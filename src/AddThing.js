@@ -4,18 +4,25 @@ import {ServerUrl} from "./config";
 
 class AddThing extends React.Component {
 
+
     constructor(props) {
         super(props);
         this.state = {
-            value: ""
+            value: "",
+            isPrivate: false
         };
 
         this.handleValue = this.handleValue.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handlePrivate = this.handlePrivate.bind(this);
     }
 
     handleValue(event) {
         this.setState({value: event.target.value});
+    }
+
+    handlePrivate(event) {
+        this.setState({isPrivate: event.target.checked});
     }
 
     async handleSubmit(event) {
@@ -23,6 +30,7 @@ class AddThing extends React.Component {
         const formData = new URLSearchParams();
 
         formData.append('thing', this.state.value);
+        formData.append('private', this.state.isPrivate ? '0' : '1');
 
 
         try {
@@ -53,14 +61,19 @@ class AddThing extends React.Component {
 
     render() {
         return (
-            <form className="mt-4" onSubmit={this.handleSubmit} >
-                <div className="input-group">
+            <form className="mt-4" onSubmit={this.handleSubmit}>
+                <div className="form-group">
                     <input className="form-control" value={this.state.value} onChange={this.handleValue}
                            id="inputGroupSelect04"/>
-                    <div className="input-group-append">
-                        <button className="btn btn-outline-secondary" type="submit">Add</button>
-                    </div>
                 </div>
+
+                <div className="form-check">
+                    <input type="checkbox" value="1" className="form-check-input" id="exampleCheck1"
+                           onChange={this.handlePrivate} defaultChecked={this.state.isPrivate}/>
+                    <label className="form-check-label" htmlFor="exampleCheck1">Private</label>
+                </div>
+
+                <button className="btn btn-outline-secondary" type="submit">Add</button>
             </form>
         );
     }

@@ -32,7 +32,6 @@ class Login extends React.Component {
 
             const myJson = await response.json();
             sessionStorage.setItem('userId', myJson.id);
-            console.log(myJson);
             this.props.LoggedState(myJson);
 
             this.setState({userRedirect: myJson.isLogged});
